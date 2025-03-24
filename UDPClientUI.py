@@ -41,7 +41,7 @@ def receive_messages():
         except OSError:
             break
 
-send_button = tk.Button(root, text="Gửi", command=send_message)
+send_button = tk.Button(root, text="Send", command=send_message)
 send_button.pack(pady=5)
 
 receive_thread = threading.Thread(target=receive_messages, daemon=True)

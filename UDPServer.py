@@ -16,7 +16,7 @@ def listen_for_exit():
     while True:
         command = input()
         if command.lower() == "exit":
-            print("🛑 Server is shutting down...")
+            print("🛑 Server is shutting down.....")
             running = False
             serverSocket.close()
             break
