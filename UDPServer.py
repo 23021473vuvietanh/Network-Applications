@@ -1,22 +1,23 @@
-from socket import *
+import socket
 import threading
 
+serverIP = "0.0.0.0"  # Lắng nghe trên tất cả các địa chỉ mạng
 serverPort = 12000
-serverSocket = socket(AF_INET, SOCK_DGRAM)
-serverSocket.bind(('', serverPort))
 
-clients = set() 
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+serverSocket.bind((serverIP, serverPort))
+
+clients = set()
 running = True  
 
-print("🟢 The server is ready to receive (type 'exit' to stop)")
-
+print("🟢 Server đang lắng nghe (Nhập 'exit' để dừng)...")
 
 def listen_for_exit():
     global running
     while True:
         command = input()
         if command.lower() == "exit":
-            print("🛑 Server is shutting down.....")
+            print("🛑 Server đang tắt...")
             running = False
             serverSocket.close()
             break
@@ -28,18 +29,20 @@ while running:
     try:
         message, clientAddress = serverSocket.recvfrom(2048)  
         senderIP, senderPort = clientAddress
-        modifiedMessage = f"Client {senderPort}: {message.decode().upper()}"
+        message_text = message.decode().upper()
 
         if clientAddress not in clients:
             clients.add(clientAddress) 
-            print(f"New client connected: {clientAddress}")
+            print(f"📌 Client mới kết nối: {clientAddress}")
 
-        print(f"Received from {clientAddress}: {message.decode()}")
+        print(f"📩 [{senderIP}:{senderPort}] -> {message_text}")
 
+        # Gửi tin nhắn đến tất cả client khác
         for otherClient in clients:
             if otherClient != clientAddress:
-                serverSocket.sendto(modifiedMessage.encode(), otherClient)
-    except OSError:
-        break 
+                serverSocket.sendto(f"Client {senderPort}: {message_text}".encode(), otherClient)
 
-print("🔴 Server stopped.")
+    except OSError:
+        break  
+
+print("🔴 Server đã dừng.")
