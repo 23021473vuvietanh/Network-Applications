@@ -10,14 +10,14 @@ serverSocket.bind((serverIP, serverPort))
 clients = set()
 running = True  
 
-print("🟢 Server đang lắng nghe (Nhập 'exit' để dừng)...")
+print("Server đang lắng nghe (Nhập 'exit' để dừng)...")
 
 def listen_for_exit():
     global running
     while True:
         command = input()
         if command.lower() == "exit":
-            print("🛑 Server đang tắt...")
+            print("Server đang tắt...")
             running = False
             serverSocket.close()
             break
@@ -33,11 +33,10 @@ while running:
 
         if clientAddress not in clients:
             clients.add(clientAddress) 
-            print(f"📌 Client mới kết nối: {clientAddress}")
+            print(f"Client mới kết nối: {clientAddress}")
 
-        print(f"📩 [{senderIP}:{senderPort}] -> {message_text}")
+        print(f"[{senderIP}:{senderPort}] -> {message_text}")
 
-        # Gửi tin nhắn đến tất cả client khác
         for otherClient in clients:
             if otherClient != clientAddress:
                 serverSocket.sendto(f"Client {senderPort}: {message_text}".encode(), otherClient)
@@ -45,4 +44,4 @@ while running:
     except OSError:
         break  
 
-print("🔴 Server đã dừng.")
+print("Server đã dừng.")

@@ -28,18 +28,30 @@ def send_message():
     message = message_entry.get()
     if message:
         clientSocket.sendto(message.encode(), (serverName, serverPort))
+        chat_display.config(state=tk.NORMAL)
+        chat_display.insert(tk.END, f"You: {message}\n")
+        chat_display.config(state=tk.DISABLED)
         message_entry.delete(0, tk.END)
-
 
 def receive_messages():
     while True:
         try:
             data, _ = clientSocket.recvfrom(2048)
-            chat_display.config(state=tk.NORMAL)
-            chat_display.insert(tk.END, f" {data.decode()}\n")
-            chat_display.config(state=tk.DISABLED)
+            received_text = data.decode()
+
+            if received_text.islower(): 
+                modified_text = received_text.upper()
+                clientSocket.sendto(modified_text.encode(), (serverName, serverPort)) 
+                chat_display.config(state=tk.NORMAL)
+                chat_display.insert(tk.END, f"Received & sent back: {modified_text}\n")
+                chat_display.config(state=tk.DISABLED)
+            else:
+                chat_display.config(state=tk.NORMAL)
+                chat_display.insert(tk.END, f"Server: {received_text}\n")
+                chat_display.config(state=tk.DISABLED)
         except OSError:
             break
+
 
 send_button = tk.Button(root, text="Send", command=send_message)
 send_button.pack(pady=5)
