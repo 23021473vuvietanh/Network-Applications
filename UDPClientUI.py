@@ -47,7 +47,7 @@ def receive_messages():
                 chat_display.config(state=tk.DISABLED)
             else:
                 chat_display.config(state=tk.NORMAL)
-                chat_display.insert(tk.END, f"Server: {received_text}\n")
+                chat_display.insert(tk.END, f"{received_text}\n")
                 chat_display.config(state=tk.DISABLED)
         except OSError:
             break
