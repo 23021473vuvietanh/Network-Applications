@@ -32,9 +32,9 @@ while running:
 
         if clientAddress not in clients:
             clients.add(clientAddress) 
-            print(f"📩 New client connected: {clientAddress}")
+            print(f"New client connected: {clientAddress}")
 
-        print(f"📨 Received from {clientAddress}: {message.decode()}")
+        print(f"Received from {clientAddress}: {message.decode()}")
 
         for otherClient in clients:
             if otherClient != clientAddress:

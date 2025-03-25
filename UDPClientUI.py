@@ -7,7 +7,7 @@ serverName = '192.168.0.101'
 serverPort = 12000
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-clientSocket.bind(('192.168.0.101', 0))
+clientSocket.bind((serverName, 0))
 clientIP, clientPort = clientSocket.getsockname()
 clientSocket.sendto(("Hello from client " + str(clientSocket.getsockname()[1])).encode(), (serverName, serverPort))
 # clientSocket.sendto(("Hello client " + str(clientPort)).encode(), (serverName, serverPort))
