@@ -11,19 +11,15 @@ client_socket.connect((SERVER_IP, SERVER_PORT))
 
 # Tạo giao diện Tkinter
 root = tk.Tk()
-root.title("TCP Chat Client")
-root.geometry("500x500")
-root.configure(bg="#f0f0f0")
+root.title("TCP Chat")
+root.geometry("500x400")
 
 chat_display = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=15, font=("Arial", 12))
 chat_display.pack(pady=10)
 chat_display.config(state=tk.DISABLED, bg="#ffffff", fg="#000000")
 
-message_frame = tk.Frame(root, bg="#f0f0f0")
-message_frame.pack(pady=5)
-
-message_entry = tk.Entry(message_frame, width=40, font=("Arial", 12))
-message_entry.pack(side=tk.LEFT, padx=5)
+message_entry = tk.Entry(root, width=40)
+message_entry.pack(padx=10, pady=5, side=tk.LEFT, expand=True, fill=tk.X)
 
 def send_message(event=None):
     """Gửi tin nhắn đến server"""
@@ -52,13 +48,13 @@ def receive_messages():
             messagebox.showerror("Error", f"Error receiving message: {e}")
             break
 
-send_button = tk.Button(message_frame, text="Send", command=send_message, font=("Arial", 12), bg="#4CAF50", fg="white", padx=10, pady=5)
-send_button.pack(side=tk.RIGHT)
 
 # Nhấn Enter để gửi tin nhắn
 root.bind("<Return>", send_message)
 
-# Khởi động luồng nhận tin nhắn
+send_button = tk.Button(root, text="Send", command=send_message)
+send_button.pack(pady=5)
+
 receive_thread = threading.Thread(target=receive_messages, daemon=True)
 receive_thread.start()
 

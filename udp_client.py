@@ -3,12 +3,12 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 
-SERVER_IP = '192.168.56.1'  # Thay bằng IP của máy chủ
+SERVER_IP = '192.168.0.102'
 SERVER_PORT = 12000
 
 # Tạo socket UDP cho client
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-client_socket.bind(("", 0))  # Lắng nghe trên cổng bất kỳ
+client_socket.bind(("", 0))
 client_ip, client_port = client_socket.getsockname()
 
 # Gửi thông báo kết nối tới server
@@ -16,7 +16,7 @@ client_socket.sendto(f"Client {client_ip}:{client_port} connected".encode(), (SE
 
 # Khởi tạo giao diện GUI
 root = tk.Tk()
-root.title("UDP Chat Client")
+root.title("UDP Chat")
 root.geometry("500x400")
 
 chat_display = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=20)
@@ -37,7 +37,7 @@ def send_message():
     message = message_entry.get()
     if message:
         try:
-            full_message = f"Client: {message}"  # Thay 'Server' thành 'Client'
+            full_message = f"Server: {message}"
             client_socket.sendto(full_message.encode(), (SERVER_IP, SERVER_PORT))
             update_chat(f"You: {message}")
             message_entry.delete(0, tk.END)
@@ -50,7 +50,7 @@ def receive_messages():
         try:
             data, _ = client_socket.recvfrom(2048)
             message = data.decode()
-            root.after(0, update_chat, message)  # Cập nhật giao diện
+            root.after(0, update_chat, message)
         except Exception as e:
             print("Error receiving message:", e)
             break
@@ -61,7 +61,6 @@ message_entry.bind("<Return>", lambda event: send_message())
 send_button = tk.Button(root, text="Send", command=send_message)
 send_button.pack(pady=5)
 
-# Tạo thread nhận tin nhắn
 receive_thread = threading.Thread(target=receive_messages, daemon=True)
 receive_thread.start()
 
