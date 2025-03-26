@@ -2,7 +2,7 @@
 
 import socket
 
-def start_udp_server(server_ip = "0.0.0.0", server_port = 12000):
+def start_udp_server(server_ip = "192.168.114.1", server_port = 12000):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_socket.bind((server_ip, server_port))
     print(f"UDP Server listening on {server_ip}:{server_port}")
